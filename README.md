@@ -1,12 +1,40 @@
-# The Porisjem Protocol (ผู้พิทักษ์แห่งความเงียบ)
+# PRGX-AG Governance Runtime
 
-PRGX-AG is the backend governance core of **AETHERIUM GENESIS (AGIOpg)**. The repository couples executable Python orchestration with repository-resident policy, manifests, audit state, and workflow definitions so the system can observe, interpret, repair, and learn within bounded safety rules.
+PRGX-AG is a **Python backend repository with embedded governance specifications**. It combines executable orchestration code under `src/prgx_ag/` with repository-resident policy, manifests, audit state, and workflow definitions under `.prgx-ag/` so the system can observe, interpret, and apply bounded repair actions under explicit safety rules.
+
+## Repository Positioning
+- **What this repo is:** an implementation-focused backend/runtime project plus the governance documents it executes against.
+- **What this repo is not:** a static documentation-only site, and not a claim of proven large-scale production adoption.
+- **Current maturity:** architecture-complete for local development and validation, but still early in public/community traction.
+
+## Standard Term Mapping
+The project intentionally uses domain language, but each term maps to a conventional software concept.
+
+| Project term | Standard software meaning |
+| --- | --- |
+| **Patimokkha** | policy guardrail / safety rule engine |
+| **Porisjem Protocol** | governance workflow model |
+| **AetherBus** | async event bus / internal pub-sub layer |
+| **GemOfWisdom** | bounded learning record / derived improvement artifact |
+| **Inspira** | product intent / design principles |
+| **Firma** | executable implementation / runtime behavior |
+| **PRGX1 Sentry** | scanner / observer agent |
+| **PRGX2 Mechanic** | repair executor / fix application agent |
+| **PRGX3 Diplomat** | translator / narrative and intent-building agent |
+| **Nexus** | orchestrator / coordination service |
 
 ## Inspira vs Firma
 - **Inspira (เจตจำนง):** constitutional intent, mission, and ethical direction.
 - **Firma (โครงสร้าง):** executable implementation that realizes Inspira safely.
 
 The codebase keeps intention, observation, interpretation, execution, ethics, and learning in separate modules to preserve governance boundaries.
+
+## Repository Layout
+- `src/prgx_ag/`: Python runtime, orchestrator, agents, schemas, policy evaluators, and services.
+- `.prgx-ag/`: governance data such as policies, manifests, workflows, audit state, and learning state.
+- `tests/`: regression and integration coverage for the runtime and repository metadata.
+- `.github/workflows/`: repository validation and governed automation.
+- `package.json` and `index.html`: lightweight repository metadata/proofing assets kept at the root for HTML/metadata checks; they are **supporting repo artifacts**, not the primary application stack.
 
 ## System Architecture Diagram (Database-State Aligned)
 
@@ -163,15 +191,17 @@ python -m compileall src
 - Patimokkha validation occurs before repair execution.
 
 ## English Summary
-- Repository health is governed by `.prgx-ag` policies, manifests, workflows, and state.
+- PRGX-AG is a hybrid repository: executable Python backend plus governance assets in `.prgx-ag`.
 - Runtime entrypoint: `src/prgx_ag/main.py`.
 - Core orchestration: `src/prgx_ag/orchestrator/nexus.py`.
-- Repair execution is bounded by policy plus writable/protected path controls.
-- The README intentionally omits finished-work suggestion lists so active work is not mixed with archived work.
+- Domain-specific terminology is documented above with standard software equivalents to lower onboarding cost.
+- Root `package.json` and `index.html` exist as repository metadata/proofing artifacts rather than evidence of a JavaScript frontend.
+- Public adoption should be described conservatively as early-stage until meaningful community usage exists.
 
 ## สรุประบบภาษาไทย
-- สุขภาพของรีโพซิทอรีถูกกำกับด้วยนโยบาย แมนิเฟสต์ เวิร์กโฟลว์ และสถานะใน `.prgx-ag`.
+- PRGX-AG เป็นรีโปแบบผสม: มีทั้ง Python backend ที่รันได้จริง และ governance assets ใน `.prgx-ag`.
 - จุดเริ่มรันไทม์หลักอยู่ที่ `src/prgx_ag/main.py`.
 - ตัวประสานงานหลักของระบบอยู่ที่ `src/prgx_ag/orchestrator/nexus.py`.
-- การซ่อมแซมถูกจำกัดด้วยนโยบาย Patimokkha และรายการเส้นทางที่อนุญาต/ป้องกันไว้.
-- README นี้จงใจไม่เก็บรายการข้อเสนอที่ปิดงานแล้ว เพื่อไม่ให้ปะปนกับงานที่ยังดำเนินอยู่.
+- มีการอธิบายศัพท์เฉพาะควบคู่กับคำมาตรฐานของซอฟต์แวร์เพื่อลด learning curve.
+- ไฟล์ `package.json` และ `index.html` ที่ root เป็น metadata/proofing artifacts ของรีโป ไม่ได้หมายความว่าโปรเจ็กต์นี้เป็น JavaScript frontend.
+- สถานะการยอมรับจากชุมชนควรถูกอธิบายอย่างระมัดระวังว่าเป็นโครงการระยะเริ่มต้น จนกว่าจะมีการใช้งานสาธารณะที่ชัดเจน.

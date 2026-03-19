@@ -102,3 +102,11 @@ Revert this change set if consumers require previous static-only documentation r
 ### 4) Test-improvement task
 - Add a regression test that proves dry-run repair verification leaves both file contents and directory tree state unchanged after execution.
 - Why this is worth doing: the current suite validates success paths and metadata, but it does not explicitly assert that dry-run execution avoids filesystem side effects such as creating then deleting package directories or mutating mtimes/content during verification.
+
+
+## 2026-03-19 Documentation conflict reconciliation
+- Corrected `AGENTS.md` so the repository is described as a hybrid Python backend plus governance-documentation project instead of a static/documentation-only repository.
+- Reframed the public README positioning to avoid overstating production adoption while still documenting the executable backend architecture already present in `src/prgx_ag/`.
+- Added a terminology mapping table so domain names such as Patimokkha, Porisjem, AetherBus, GemOfWisdom, Inspira, and Firma are explicitly connected to standard software concepts.
+- Clarified why `package.json` and `index.html` exist at the repository root and documented them as metadata/proofing artifacts rather than primary backend runtime files.
+- Softened public maturity language to reflect an early-stage project with limited community traction instead of implying broad production validation.
