@@ -110,3 +110,9 @@ Revert this change set if consumers require previous static-only documentation r
 - Added a terminology mapping table so domain names such as Patimokkha, Porisjem, AetherBus, GemOfWisdom, Inspira, and Firma are explicitly connected to standard software concepts.
 - Clarified why `package.json` and `index.html` exist at the repository root and documented them as metadata/proofing artifacts rather than primary backend runtime files.
 - Softened public maturity language to reflect an early-stage project with limited community traction instead of implying broad production validation.
+
+
+## 2026-03-20 Workflow environment mapping for deployment readiness
+- Added explicit GitHub Environment wiring so workflow runs can target `development`, `staging`, or `production` with consistent branch-based defaults.
+- Documented the required environment names, protection guidance, and suggested environment-scoped secrets for future deployment/promotion jobs.
+- Kept the README release/deployment guidance aligned with the workflow configuration so operators can create matching repository environments in GitHub settings.

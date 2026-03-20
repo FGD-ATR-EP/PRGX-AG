@@ -22,6 +22,10 @@ on:
         description: "Dry run mode"
         required: false
         default: "true"
+      target_environment:
+        description: "GitHub Environment: development | staging | production"
+        required: false
+        default: "staging"
   schedule:
     - cron: "*/30 * * * *"
 
@@ -44,6 +48,8 @@ jobs:
     name: Scan, Once, and Test
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment:
+      name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target_environment || (github.ref_name == 'main' && 'production' || github.ref_name == 'master' && 'production' || github.ref_name == 'develop' && 'staging' || 'development') }}
 
     steps:
       - name: Checkout repository
@@ -54,11 +60,19 @@ jobs:
         run: |
           echo "PRGX_WORKFLOW_MODE=${{ github.event.inputs.mode }}" >> "$GITHUB_ENV"
           echo "PRGX_AG_DRY_RUN=${{ github.event.inputs.dry_run }}" >> "$GITHUB_ENV"
+          echo "PRGX_DEPLOY_ENV=${{ github.event.inputs.target_environment }}" >> "$GITHUB_ENV"
 
-      - name: Set default workflow mode
+      - name: Set branch-derived environment defaults
         if: github.event_name != 'workflow_dispatch'
         run: |
           echo "PRGX_WORKFLOW_MODE=once" >> "$GITHUB_ENV"
+          if [ "${GITHUB_REF_NAME}" = "main" ] || [ "${GITHUB_REF_NAME}" = "master" ]; then
+            echo "PRGX_DEPLOY_ENV=production" >> "$GITHUB_ENV"
+          elif [ "${GITHUB_REF_NAME}" = "develop" ]; then
+            echo "PRGX_DEPLOY_ENV=staging" >> "$GITHUB_ENV"
+          else
+            echo "PRGX_DEPLOY_ENV=development" >> "$GITHUB_ENV"
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -75,6 +89,10 @@ jobs:
       - name: Prepare artifact directories
         run: |
           mkdir -p .prgx-ag/artifacts .prgx-ag/audit .prgx-ag/state
+
+      - name: Announce workflow environment
+        run: |
+          echo "Using GitHub Environment: ${PRGX_DEPLOY_ENV}"
 
       - name: Validate source tree compiles
         run: python -m compileall src

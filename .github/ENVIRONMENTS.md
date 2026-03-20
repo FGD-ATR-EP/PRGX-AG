@@ -1,0 +1,31 @@
+# GitHub Environment Setup
+
+This repository uses GitHub Actions environment gates for workflow-driven deployment and promotion flows. GitHub Environments are configured in repository settings, but the expected names and branch mappings are versioned here so workflow behavior stays reproducible.
+
+## Required environment names
+- `development`
+- `staging`
+- `production`
+
+## Workflow mapping
+- `.github/workflows/main.yml`
+  - `main` / `master` -> `production`
+  - `develop` -> `staging`
+  - `feature/**` and other branches -> `development`
+  - `workflow_dispatch` can override the target with the `target_environment` input
+- `.github/workflows/prgx-nightly.yml` -> `staging`
+- `.github/workflows/prgx-heal-pr.yml` -> `staging`
+
+## Recommended protection rules
+1. Add required reviewers for `production`.
+2. Scope secrets and vars per environment when deployment hooks are introduced.
+3. Use wait timers only for `production` if you need a promotion hold.
+
+## Suggested environment variables or secrets
+- `PRGX_RUNTIME_PROFILE`
+- `PRGX_DEPLOY_TARGET`
+- Any future cloud credentials needed by downstream deployment jobs
+
+## Notes
+- GitHub Environments cannot be fully created from tracked repository files alone; they must also exist in the repository settings UI or via the GitHub API.
+- These names are intentionally simple so future deployment workflows can share the same approval and secret boundaries.

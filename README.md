@@ -185,6 +185,23 @@ python -m compileall src
 - `pytest -q --maxfail=1`
 - `pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1`
 
+## GitHub Environments for Workflow-Driven Deployments
+The repository now reserves three GitHub Environments for workflow-controlled deployment and promotion gates:
+
+- `development`: default environment for feature branches and low-risk workflow dispatch runs.
+- `staging`: default environment for `develop`, nightly automation, and governed healing review flows.
+- `production`: default environment for `main`/`master` runs and any manually dispatched production promotion.
+
+### Recommended environment protection rules
+- Require manual reviewers before `production` jobs continue.
+- Store environment-specific secrets only in the matching environment rather than as broad repository secrets.
+- Keep branch-to-environment mapping aligned with `.github/workflows/main.yml`, `prgx-nightly.yml`, and `prgx-heal-pr.yml`.
+
+### Suggested environment secrets
+- `PRGX_RUNTIME_PROFILE`: optional runtime profile override for the target environment.
+- `PRGX_DEPLOY_TARGET`: external deployment target identifier or cluster name if promotion hooks are added later.
+- `GITHUB_TOKEN`: continue using the GitHub-provided token unless a narrower environment-scoped token is required.
+
 ## Safety Boundaries
 - PRGX1 is strictly read-only and does not write files.
 - PRGX2 is the sole write authority and is constrained by allowlist/protected-path controls.
