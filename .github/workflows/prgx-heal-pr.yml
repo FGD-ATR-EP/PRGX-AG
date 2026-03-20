@@ -16,6 +16,8 @@ concurrency:
 jobs:
   heal:
     runs-on: ubuntu-latest
+    environment:
+      name: staging
     env:
       PRGX_AG_DRY_RUN: "false"
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
