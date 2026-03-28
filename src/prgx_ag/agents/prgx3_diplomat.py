@@ -66,8 +66,14 @@ class PRGX3Diplomat(BaseAgent):
         repo_root = Path(str(findings.get("target", ".")))
         profile = RUNTIME_PROFILES[self.runtime_profile]
 
-        issue_count = findings.get("issue_count", 0)
-        if isinstance(issue_count, int) and issue_count > profile.max_issue_count_for_auto_fix:
+        issue_count = findings.get("issue_count")
+        if not isinstance(issue_count, int):
+            issue_count = 0
+            for key in ("structural_issues", "dependency_issues"):
+                issues = findings.get(key, [])
+                if isinstance(issues, list):
+                    issue_count += len(issues)
+        if issue_count > profile.max_issue_count_for_auto_fix:
             self.logger.warning(
                 "Issue count %s exceeds %s profile threshold %s; skip execution.",
                 issue_count,
