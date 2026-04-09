@@ -1,26 +1,22 @@
 # Copyright Notice
 
 Copyright (c) 2026 PRGX-AG contributors.
-All rights reserved.
 
 ## Repository Components
 
-This repository contains:
-- Python runtime source code under `src/prgx_ag/`,
-- governance and operational data under `.prgx-ag/`,
-- CI/CD and validation workflows under `.github/workflows/`,
-- documentation and metadata at the repository root.
+This repository includes:
+- Python runtime source code in `src/prgx_ag/`,
+- governance and operations data in `.prgx-ag/`,
+- test and workflow automation assets,
+- architecture and policy documentation.
 
-Unless otherwise stated in individual files, copyright in all original
-materials belongs to the PRGX-AG contributors.
+Unless explicitly noted in file headers, copyright in original repository content belongs to PRGX-AG contributors.
+
+## License
+
+This repository is distributed under the MIT License. See `LICENSE` for the full text.
 
 ## Third-Party Material
 
-Third-party packages, tools, and dependencies referenced by this repository
-remain under their respective licenses and copyright terms.
-
-## Usage and Distribution
-
-See `LICENSE` (if present) and per-file headers for controlling license terms.
-When redistributing derivative work, preserve existing notices and attribution
-requirements.
+Third-party packages and tools referenced by this project remain under their own licenses and copyrights.
+When redistributing derivative work, preserve both this notice and applicable third-party notices.

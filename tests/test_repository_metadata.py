@@ -16,4 +16,4 @@ def test_repository_metadata_is_not_demo_content() -> None:
     assert package['name'] == 'prgx-ag'
     assert 'sample package.json' not in package['description'].lower()
     assert 'demo repository' not in html
-    assert 'prgx-ag repository overview' in html
+    assert 'prgx-ag operational console' in html
