@@ -171,3 +171,9 @@ Revert this change set if consumers require previous static-only documentation r
 - Reworked `README.md` architecture coverage to include an Augmented Perception Layer high-level module flow (Genesis, Manifest, BioVision, Governor, PRGX, Tachyon, Edge/WASM) tied directly to repository-backed `.prgx-ag` data stores.
 - Removed completed-recommendation style sections from bilingual README content so active backlog/proposals do not mix with already-finished work items.
 - Added explicit "Open Problems & Required Fixes" plus forward proposal backlogs (EN/TH) to keep unresolved risks, required remediations, and next-step feature proposals visible in one operational section.
+
+## 2026-04-09 Web console operationalization and documentation/legal refresh
+- Rebuilt root `index.html` from static text into an operational console that loads repository metadata, capability summaries, validation commands, and live previews of core governance documents.
+- Added `web/app.js` and `web/styles.css` to make the console function without a build system while keeping repository-root static hosting compatibility.
+- Reconciled repository governance/legal docs by updating `README.md`, `SECURITY.md`, and `COPYRIGHT.md` and by adding a concrete `LICENSE` file.
+- Removed stale/ambiguous top-level documentation wording and replaced it with current repository positioning and release-check guidance.

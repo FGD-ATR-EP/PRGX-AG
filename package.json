@@ -1,8 +1,11 @@
 {
   "name": "prgx-ag",
-  "version": "0.2.1",
-  "description": "Metadata for the PRGX-AG governance repository",
+  "version": "0.3.0",
+  "description": "Operational metadata for the PRGX-AG governance runtime repository",
   "private": true,
+  "scripts": {
+    "serve:console": "python -m http.server 8080"
+  },
   "dependencies": {
     "@primer/css": "17.0.1"
   },

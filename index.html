@@ -3,12 +3,67 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PRGX-AG Repository Overview</title>
+    <title>PRGX-AG Operational Console</title>
+    <meta
+      name="description"
+      content="Interactive operational overview for PRGX-AG governance runtime, policy assets, and validation commands."
+    />
+    <link rel="stylesheet" href="./web/styles.css" />
   </head>
   <body>
+    <header class="hero">
+      <h1>PRGX-AG Operational Console</h1>
+      <p>
+        Live repository overview for runtime modules, governance assets, and
+        release validation checks.
+      </p>
+      <div class="badges">
+        <span id="repo-version">version: loading…</span>
+        <span id="last-updated">updated: loading…</span>
+      </div>
+    </header>
+
     <main>
-      <h1>PRGX-AG repository overview</h1>
-      <p>This repository hosts the Porisjem Protocol governance runtime, supporting policy, manifests, audits, and bounded repair workflows.</p>
+      <section>
+        <h2>System Capabilities</h2>
+        <ul id="capability-list"></ul>
+      </section>
+
+      <section>
+        <h2>Quick Validation Commands</h2>
+        <div id="command-list" class="command-list"></div>
+      </section>
+
+      <section>
+        <h2>Repository Documents</h2>
+        <p>
+          The previews below are loaded from tracked repository files to keep
+          governance and runtime documentation synchronized.
+        </p>
+        <div class="doc-grid">
+          <article>
+            <h3>README.md</h3>
+            <pre id="readme-preview" class="preview">Loading…</pre>
+          </article>
+          <article>
+            <h3>SECURITY.md</h3>
+            <pre id="security-preview" class="preview">Loading…</pre>
+          </article>
+          <article>
+            <h3>COPYRIGHT.md</h3>
+            <pre id="copyright-preview" class="preview">Loading…</pre>
+          </article>
+        </div>
+      </section>
     </main>
+
+    <footer>
+      <small>
+        PRGX-AG is a Python governance runtime project with repository-embedded
+        policy and audit assets.
+      </small>
+    </footer>
+
+    <script type="module" src="./web/app.js"></script>
   </body>
 </html>

@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-PRGX-AG is currently maintained as a rolling mainline project.
+PRGX-AG is maintained as a rolling mainline project.
 
 | Version | Supported |
 | --- | --- |
@@ -11,35 +11,35 @@ PRGX-AG is currently maintained as a rolling mainline project.
 
 ## Reporting a Vulnerability
 
-Please report security issues privately before public disclosure.
+Please report vulnerabilities privately before public disclosure.
 
-1. Open a **private security advisory** in GitHub (preferred), or contact maintainers through repository security contact channels.
+1. Open a **GitHub Private Vulnerability Report** (preferred) or use repository-maintainer private contact.
 2. Include:
-   - affected file/module and branch or commit hash,
-   - reproduction steps or proof-of-concept,
+   - affected module/file and branch or commit hash,
+   - clear reproduction steps or proof of concept,
    - expected vs actual behavior,
-   - potential impact (confidentiality/integrity/availability).
-3. Do **not** publish exploit details until a fix is available.
+   - impact assessment (confidentiality/integrity/availability).
+3. Avoid public exploit disclosure until a fix or mitigation is available.
 
 ## Response Targets
 
-- Initial triage acknowledgment: within **3 business days**.
-- Risk assessment and mitigation plan: within **7 business days** for validated reports.
-- Coordinated disclosure timeline: agreed case-by-case based on severity and fix complexity.
+- Initial acknowledgment: within **3 business days**.
+- Validation and risk triage: within **7 business days** for confirmed reports.
+- Disclosure timeline: coordinated based on severity and fix complexity.
 
-## Scope Guidance
+## In-Scope Security Surfaces
 
-Security-relevant areas include:
-- Policy enforcement and repair authorization in `src/prgx_ag/policy` and `src/prgx_ag/services`.
-- Workflow automation under `.github/workflows/`.
-- Governance state integrity under `.prgx-ag/` (policy, manifests, audit, and learning state).
+- Policy enforcement and bounded repair in `src/prgx_ag/policy` and `src/prgx_ag/services`.
+- Runtime orchestration/events in `src/prgx_ag/orchestrator` and `src/prgx_ag/core`.
+- Governance state integrity in `.prgx-ag/`.
+- Automation workflows under `.github/workflows/`.
 
 ## Safe Harbor
 
-Good-faith research is welcome. Avoid:
-- destructive testing against maintainers' infrastructure,
-- data exfiltration,
-- denial-of-service behavior,
-- social engineering.
+Good-faith research is welcome. Please do **not** perform:
+- destructive or availability-impacting tests,
+- unauthorized data exfiltration attempts,
+- social-engineering against maintainers,
+- attacks against third-party infrastructure.
 
-If you follow this policy and act in good faith, we will treat your report as authorized security research.
+If you act in good faith under this policy, reports are treated as authorized security research.
