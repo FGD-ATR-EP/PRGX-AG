@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from prgx_ag.services.manifest_loader import ManifestLoader
 
 
@@ -29,3 +31,19 @@ def test_manifest_loader_reads_dependency_policy(tmp_path: Path) -> None:
     loader = ManifestLoader(tmp_path)
     data = loader.load_dependency_policy()
     assert data['packages']['pydantic']['allowed_range'] == '>=2.6,<3'
+
+
+def test_manifest_loader_raises_for_missing_manifest(tmp_path: Path) -> None:
+    loader = ManifestLoader(tmp_path)
+    with pytest.raises(FileNotFoundError):
+        loader.load_expected_structure()
+
+
+def test_manifest_loader_raises_for_non_mapping_yaml(tmp_path: Path) -> None:
+    manifest = tmp_path / '.prgx-ag/manifests/expected_structure.yaml'
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text('- src\n- tests\n', encoding='utf-8')
+
+    loader = ManifestLoader(tmp_path)
+    with pytest.raises(ValueError):
+        loader.load_expected_structure()

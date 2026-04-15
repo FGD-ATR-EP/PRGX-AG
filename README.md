@@ -57,6 +57,17 @@ pytest -q --maxfail=1
 pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1
 ```
 
+## Open Problems & Required Fixes (Forward-Looking Only)
+> This section lists only active work items to keep finished work separate.
+
+### English (EN)
+- Add automated typo checks for governance docs and Python comments in CI.
+- Expand integration coverage for failure handling in GitHub/report generation paths.
+
+### ภาษาไทย (TH)
+- เพิ่มการตรวจสะกดคำอัตโนมัติสำหรับเอกสาร governance และคอมเมนต์ในโค้ดภายใน CI
+- เพิ่มการทดสอบแบบบูรณาการในกรณี failure ของเส้นทาง GitHub/report generation
+
 ## Security and Compliance
 - Vulnerability disclosure process: `SECURITY.md`
 - Copyright and ownership notice: `COPYRIGHT.md`
