@@ -75,7 +75,7 @@ def _safe_text(
 
 def _normalize_target(value: object) -> str:
     raw = _safe_text(value, default="repository", max_len=300).replace("\\", "/")
-    parts = [part for part in raw.split("/") if part not in ("", ".")]
+    parts = [part for part in raw.split("/") if part not in ("", ".", "..")]
     normalized = "/".join(parts)
     return normalized or "repository"
 

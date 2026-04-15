@@ -146,27 +146,6 @@ Revert this change set if consumers require previous static-only documentation r
 - Rebuilt `.github/workflows/stale.yml` as an explicit governance workflow with manual dispatch, top-level permissions, concurrency, timeout, and modern `actions/stale@v10` settings.
 - Standardized stale lifecycle behavior with concrete stale/close windows, clear issue/PR messaging, exempt governance/security labels, and automatic stale-label removal on new activity.
 
-## 2026-04-02 Targeted quality backlog from codebase review
-
-- **[Text typo fix] Add automated typo guardrail for bilingual docs and code comments.**
-  - Problem: The repository has many human-written governance documents (EN/TH) but no typo-detection step in CI, so wording defects can slip into architecture/policy text and reduce trust.
-  - Proposed fix: Add a lightweight `codespell` check (configured to ignore domain-specific terms such as `Patimokkha`, `Sanghadisesa`, `AetherBus`) and run it in CI plus local `make`/`nox`/`pytest` helper command.
-  - Suggested scope: `README.md`, `SECURITY.md`, `OFFICIAL_SYSTEM_INTEGRATION_REPORT_TH.md`, `ATR_MF_AUGMENTED_PERCEPTION_ARCHITECTURE_TH.md`, and Python docstrings/comments.
-
-- **[Bug fix] Harden target-path normalization against parent-directory traversal markers.**
-  - Problem: `src/prgx_ag/services/translation_matrix.py` normalizes intent targets by removing empty and `.` path segments, but it does not remove `..` segments.
-  - Risk: A crafted finding target such as `../sensitive/path` could be propagated into intent metadata/narrative, increasing ambiguity and policy-review risk.
-  - Proposed fix: Update `_normalize_target()` to discard `..` segments and add explicit tests for traversal-like input.
-
-- **[Comment/Documentation mismatch fix] Align CLI examples with documented release-check commands in one place.**
-  - Problem: README currently mixes operational commands and release-gate checks in separate sections; this can cause maintainers to run only quick examples and miss required checks.
-  - Proposed fix: Add a short “Release check sequence” block that references the exact required commands and links it from CLI/testing sections to reduce interpretation drift.
-
-- **[Test improvement] Add contract tests for manifest loader error behavior.**
-  - Problem: Existing tests cover happy paths for `ManifestLoader`, but do not assert failures for missing file paths or invalid YAML object shapes.
-  - Proposed fix: Add tests that verify `FileNotFoundError` and `ValueError` behavior from `_load_yaml()` through public loader methods.
-  - Outcome: Stronger regression protection for governance manifest integrity handling.
-
 ## 2026-04-02 README architecture refocus and proposal hygiene update
 - Reworked `README.md` architecture coverage to include an Augmented Perception Layer high-level module flow (Genesis, Manifest, BioVision, Governor, PRGX, Tachyon, Edge/WASM) tied directly to repository-backed `.prgx-ag` data stores.
 - Removed completed-recommendation style sections from bilingual README content so active backlog/proposals do not mix with already-finished work items.
@@ -177,3 +156,8 @@ Revert this change set if consumers require previous static-only documentation r
 - Added `web/app.js` and `web/styles.css` to make the console function without a build system while keeping repository-root static hosting compatibility.
 - Reconciled repository governance/legal docs by updating `README.md`, `SECURITY.md`, and `COPYRIGHT.md` and by adding a concrete `LICENSE` file.
 - Removed stale/ambiguous top-level documentation wording and replaced it with current repository positioning and release-check guidance.
+
+## 2026-04-15 Repository hygiene pass: typo/grammar/docs alignment and bug fix
+- Fixed intent-target normalization in `src/prgx_ag/services/translation_matrix.py` so parent-directory (`..`) segments are removed from generated metadata paths.
+- Added regression tests for traversal-like target input plus `ManifestLoader` missing-file and invalid-YAML error contracts.
+- Updated `README.md` wording and kept only forward-looking bilingual proposals, explicitly removing completed suggestion overlap between English and Thai sections.
