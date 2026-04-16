@@ -53,25 +53,20 @@ python -m prgx_ag.main --scan-only
 ## Release Check Sequence
 ```bash
 python -m compileall src
+python scripts/ci/check_typos.py
+python scripts/ci/check_console_docs_consistency.py
 pytest -q --maxfail=1
 pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1
 ```
 
-## Open Problems & Required Fixes (Forward-Looking Only)
-> This section lists only active work items to keep finished work separate.
-
-### English (EN)
-- Add automated typo checks for governance docs and Python comments in CI.
-- Add a consistency check that prevents dashboard (`index.html`) and README console descriptions from drifting apart.
-
-### ภาษาไทย (TH)
-- เพิ่มการตรวจสะกดคำอัตโนมัติสำหรับเอกสาร governance และคอมเมนต์ในโค้ดภายใน CI
-- เพิ่มการตรวจความสอดคล้องระหว่างคำอธิบายแดชบอร์ดใน `index.html` กับ README เพื่อลดความคลาดเคลื่อนของเอกสาร
+## Documentation Integrity Checks (CI)
+- `scripts/ci/check_typos.py` ตรวจคำผิดแบบอัตโนมัติในเอกสาร governance (`README.md`, `SECURITY.md`, `BUGFIX_PROPOSAL.md`, และเอกสารสเปกภาษาไทย) รวมถึงคำอธิบายประกอบใน Python (docstrings/comments).
+- `scripts/ci/check_console_docs_consistency.py` ตรวจความสอดคล้องเพื่อป้องกันไม่ให้คำอธิบาย Operational Console ใน `README.md` และแดชบอร์ดใน `index.html` แตกต่างกัน.
 
 ## Security and Compliance
 - Vulnerability disclosure process: `SECURITY.md`
 - Copyright and ownership notice: `COPYRIGHT.md`
-- Open-source license terms: `LICENSE`
+- Open-source license terms (MIT): `LICENSE`
 
 ## Thai Summary (สรุประบบภาษาไทย)
 - รีโปนี้เป็นแบบผสม: Python runtime ที่รันได้จริง + governance assets ใน `.prgx-ag`.
