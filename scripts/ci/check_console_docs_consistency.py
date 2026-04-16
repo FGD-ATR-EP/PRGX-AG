@@ -56,8 +56,15 @@ def main() -> int:
     readme_text = README.read_text(encoding="utf-8")
     index_text = INDEX.read_text(encoding="utf-8")
 
-    console_block = _extract_operational_console_block(readme_text)
+def main() -> int:
+    readme_text = README.read_text(encoding="utf-8")
+    index_text = INDEX.read_text(encoding="utf-8")
 
+    try:
+        console_block = _extract_operational_console_block(readme_text)
+    except RuntimeError as exc:
+        print(f"Console documentation consistency check failed: {exc}")
+        return 1
     missing_readme = _missing_markers(console_block, README_MARKERS)
     missing_index = _missing_markers(index_text, INDEX_MARKERS)
 
