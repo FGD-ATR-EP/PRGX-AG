@@ -353,6 +353,14 @@ td code {
   background: rgba(246, 199, 96, 0.24);
 }
 
+.panel-chart {
+  grid-column: 1;
+}
+
+.panel-table {
+  grid-column: 1;
+}
+
 .panel-alerts,
 .panel-docs {
   grid-column: 2;
