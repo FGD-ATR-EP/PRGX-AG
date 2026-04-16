@@ -38,6 +38,12 @@ jobs:
       - name: Validate source tree compiles
         run: python -m compileall src
 
+      - name: Typo check (governance docs + Python annotations)
+        run: python scripts/ci/check_typos.py
+
+      - name: Console docs consistency check
+        run: python scripts/ci/check_console_docs_consistency.py
+
       - name: Ruff lint
         run: ruff check .
 
@@ -75,6 +81,12 @@ jobs:
 
       - name: Validate source tree compiles
         run: python -m compileall src
+
+      - name: Typo check (governance docs + Python annotations)
+        run: python scripts/ci/check_typos.py
+
+      - name: Console docs consistency check
+        run: python scripts/ci/check_console_docs_consistency.py
 
       - name: Run test suite
         run: pytest -q --maxfail=1
