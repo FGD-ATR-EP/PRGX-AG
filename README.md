@@ -3,7 +3,7 @@
 PRGX-AG is a **hybrid Python backend + governance-documentation repository**. The executable runtime lives in `src/prgx_ag/` and the policy/manifests/audit workflow data lives in `.prgx-ag/`.
 
 ## Repository Positioning
-- **This repository is:** implementation-ready governance runtime for local/CI operation.
+- **This repository is:** an implementation-ready governance runtime for local/CI operations.
 - **This repository is not:** a static-docs-only site and not a claim of proven large-scale production adoption.
 - **Current maturity:** architecture-complete with automated tests and governed repair flow; still early-stage in ecosystem adoption.
 
@@ -24,9 +24,9 @@ PRGX-AG is a **hybrid Python backend + governance-documentation repository**. Th
 
 ## Operational Console (`index.html`)
 The root `index.html` is an interactive repository console (no build step required):
-- shows runtime capability summary,
+- shows an operator-oriented dashboard for runtime health and task status,
+- renders KPI cards, a 24-hour throughput chart, and a recent alert queue,
 - provides copy-ready validation commands,
-- previews `README.md`, `SECURITY.md`, and `COPYRIGHT.md`,
 - loads repository version from `package.json`.
 
 Run locally with:
@@ -62,11 +62,11 @@ pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail
 
 ### English (EN)
 - Add automated typo checks for governance docs and Python comments in CI.
-- Expand integration coverage for failure handling in GitHub/report generation paths.
+- Add a consistency check that prevents dashboard (`index.html`) and README console descriptions from drifting apart.
 
 ### ภาษาไทย (TH)
 - เพิ่มการตรวจสะกดคำอัตโนมัติสำหรับเอกสาร governance และคอมเมนต์ในโค้ดภายใน CI
-- เพิ่มการทดสอบแบบบูรณาการในกรณี failure ของเส้นทาง GitHub/report generation
+- เพิ่มการตรวจความสอดคล้องระหว่างคำอธิบายแดชบอร์ดใน `index.html` กับ README เพื่อลดความคลาดเคลื่อนของเอกสาร
 
 ## Security and Compliance
 - Vulnerability disclosure process: `SECURITY.md`
