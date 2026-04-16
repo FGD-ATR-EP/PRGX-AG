@@ -33,6 +33,12 @@ Please report vulnerabilities privately before public disclosure.
 - Runtime orchestration/events in `src/prgx_ag/orchestrator` and `src/prgx_ag/core`.
 - Governance state integrity in `.prgx-ag/`.
 - Automation workflows under `.github/workflows/`.
+- Documentation integrity controls in `scripts/ci/check_typos.py` and `scripts/ci/check_console_docs_consistency.py`.
+
+## Security Assurance in CI
+
+- `prgx-test` workflow compiles Python sources, runs lint/type checks, validates typo detection for governance documentation + Python annotations, and enforces console-description consistency between `README.md` and `index.html`.
+- These controls reduce documentation drift and lower the chance of unsafe operator guidance in governance workflows.
 
 ## Safe Harbor
 

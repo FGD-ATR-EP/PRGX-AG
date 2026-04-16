@@ -147,3 +147,9 @@ Revert this change set if consumers require previous static-only documentation r
 - Rebuilt `index.html` into a true operator-oriented dashboard layout with persistent sidebar navigation, KPI cards, 24-hour throughput chart area, live status table, and recent-alert queue.
 - Replaced legacy `web/app.js` document-preview rendering with operational telemetry rendering (KPIs, searchable task table, alert feed, command copy actions, and snapshot refresh behavior).
 - Reworked `web/styles.css` into a responsive console design system that supports desktop and tablet/mobile layouts while preserving no-build static hosting.
+
+## 2026-04-16 CI governance typo/consistency gates and policy docs refresh
+- Added `scripts/ci/check_typos.py` to enforce automatic typo checks for governance documentation and Python annotations (docstrings/comments) in CI.
+- Added `scripts/ci/check_console_docs_consistency.py` to prevent drift between README Operational Console descriptions and `index.html` dashboard semantics.
+- Updated `.github/workflows/prgx-test.yml` to run both new documentation-integrity checks before governed integration/test matrix execution.
+- Refreshed `README.md`, `SECURITY.md`, `LICENSE`, and `index.html` metadata text so repository security/legal/console descriptions stay consistent with the new controls.
