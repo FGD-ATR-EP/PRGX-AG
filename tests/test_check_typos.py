@@ -199,7 +199,7 @@ def test_find_typos_all_known_typos_in_dict() -> None:
 
 
 def test_find_typos_correct_word_not_flagged() -> None:
-    # "the" is correct; "teh" is the typo - ensure correct words are not flagged
+    # "the" is correct and should not be flagged as a typo.
     entries = [(1, "the government repository security environment")]
     result = check_typos._find_typos(entries)
     assert result == []
