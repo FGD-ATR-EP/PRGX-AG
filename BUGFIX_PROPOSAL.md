@@ -161,3 +161,8 @@ Revert this change set if consumers require previous static-only documentation r
 - Fixed intent-target normalization in `src/prgx_ag/services/translation_matrix.py` so parent-directory (`..`) segments are removed from generated metadata paths.
 - Added regression tests for traversal-like target input plus `ManifestLoader` missing-file and invalid-YAML error contracts.
 - Updated `README.md` wording and kept only forward-looking bilingual proposals, explicitly removing completed suggestion overlap between English and Thai sections.
+
+## 2026-04-15 Operational dashboard UX and telemetry-structure refresh
+- Rebuilt `index.html` into a true operator-oriented dashboard layout with persistent sidebar navigation, KPI cards, 24-hour throughput chart area, live status table, and recent-alert queue.
+- Replaced legacy `web/app.js` document-preview rendering with operational telemetry rendering (KPIs, searchable task table, alert feed, command copy actions, and snapshot refresh behavior).
+- Reworked `web/styles.css` into a responsive console design system that supports desktop and tablet/mobile layouts while preserving no-build static hosting.

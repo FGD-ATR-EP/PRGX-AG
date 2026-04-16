@@ -4,10 +4,19 @@
   "description": "Operational metadata for the PRGX-AG governance runtime repository",
   "private": true,
   "scripts": {
-    "serve:console": "python -m http.server 8080"
+    "serve:console": "python -m http.server 8080",
+    "test:web": "jest --passWithNoTests"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom",
+    "testMatch": ["**/tests/web/**/*.test.js"]
   },
   "dependencies": {
     "@primer/css": "17.0.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0"
+  }
 }

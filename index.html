@@ -3,66 +3,153 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PRGX-AG Operational Console</title>
+    <title>PRGX-AG Operational Console Dashboard</title>
     <meta
       name="description"
-      content="Interactive operational overview for PRGX-AG governance runtime, policy assets, and validation commands."
+      content="Operational dashboard for PRGX-AG runtime health, data flows, and governance alerts."
     />
     <link rel="stylesheet" href="./web/styles.css" />
   </head>
   <body>
-    <header class="hero">
-      <h1>PRGX-AG Operational Console</h1>
-      <p>
-        Live repository overview for runtime modules, governance assets, and
-        release validation checks.
-      </p>
-      <div class="badges">
-        <span id="repo-version">version: loading…</span>
-        <span id="last-updated">updated: loading…</span>
-      </div>
-    </header>
-
-    <main>
-      <section>
-        <h2>System Capabilities</h2>
-        <ul id="capability-list"></ul>
-      </section>
-
-      <section>
-        <h2>Quick Validation Commands</h2>
-        <div id="command-list" class="command-list"></div>
-      </section>
-
-      <section>
-        <h2>Repository Documents</h2>
-        <p>
-          The previews below are loaded from tracked repository files to keep
-          governance and runtime documentation synchronized.
-        </p>
-        <div class="doc-grid">
-          <article>
-            <h3>README.md</h3>
-            <pre id="readme-preview" class="preview">Loading…</pre>
-          </article>
-          <article>
-            <h3>SECURITY.md</h3>
-            <pre id="security-preview" class="preview">Loading…</pre>
-          </article>
-          <article>
-            <h3>COPYRIGHT.md</h3>
-            <pre id="copyright-preview" class="preview">Loading…</pre>
-          </article>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-mark">P</div>
+          <div>
+            <h1>PRGX-AG</h1>
+            <p>Operational Console</p>
+          </div>
         </div>
-      </section>
-    </main>
 
-    <footer>
-      <small>
-        PRGX-AG is a Python governance runtime project with repository-embedded
-        policy and audit assets.
-      </small>
-    </footer>
+        <button class="primary-action" type="button" disabled aria-disabled="true">+ New Analysis</button>
+
+        <nav class="menu" aria-label="Primary navigation">
+          <a class="active" href="#dashboard">Dashboard</a>
+          <a href="#health">Operational Health</a>
+          <a href="#flows">Data Flows</a>
+          <a href="#reports">Reports</a>
+          <a href="#audit">Audit Logs</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a href="javascript:void(0)" aria-disabled="true" tabindex="-1">Support</a>
+          <a href="javascript:void(0)" aria-disabled="true" tabindex="-1">Sign Out</a>
+        </div>
+      </aside>
+
+      <main class="main-panel" id="dashboard">
+        <header class="topbar">
+          <div>
+            <h2>Operational Dashboard</h2>
+            <p id="generated-at">snapshot: loading…</p>
+          </div>
+          <div class="topbar-actions">
+            <label>
+              <span class="sr-only">Search systems or tasks</span>
+              <input id="search-input" type="search" placeholder="Search task, stream, region…" />
+            </label>
+            <button id="refresh-btn" type="button">Refresh</button>
+          </div>
+        </header>
+
+        <section class="kpi-grid" aria-label="Key performance indicators">
+          <article class="kpi-card">
+            <h3>System Health</h3>
+            <p id="kpi-health" class="kpi-value">--</p>
+            <small id="kpi-health-note">loading…</small>
+          </article>
+          <article class="kpi-card">
+            <h3>Active Data Streams</h3>
+            <p id="kpi-streams" class="kpi-value">--</p>
+            <small id="kpi-streams-note">loading…</small>
+          </article>
+          <article class="kpi-card">
+            <h3>Pending Alerts</h3>
+            <p id="kpi-alerts" class="kpi-value danger">--</p>
+            <small id="kpi-alerts-note">loading…</small>
+          </article>
+          <article class="kpi-card">
+            <h3>Records Processed (24h)</h3>
+            <p id="kpi-records" class="kpi-value">--</p>
+            <small id="kpi-records-note">loading…</small>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel panel-chart" id="flows">
+            <div class="panel-head">
+              <div>
+                <h3>Data Processing Volume</h3>
+                <p>Last 24 hours throughput (records/min)</p>
+              </div>
+              <div class="legend">
+                <span><i class="legend-dot"></i> current hour</span>
+                <span><i class="legend-dot muted"></i> trailing hours</span>
+              </div>
+            </div>
+            <div id="chart-bars" class="chart-bars" role="img" aria-label="Processing volume chart"></div>
+            <div class="chart-labels">
+              <span>00:00</span>
+              <span>06:00</span>
+              <span>12:00</span>
+              <span>18:00</span>
+              <span>23:59</span>
+            </div>
+          </article>
+
+          <article class="panel panel-table" id="health">
+            <div class="panel-head">
+              <div>
+                <h3>Live Operational Status</h3>
+                <p>Task execution state from orchestrator telemetry</p>
+              </div>
+              <p id="task-summary" class="pill">loading…</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Task Name</th>
+                    <th>Process ID</th>
+                    <th>Status</th>
+                    <th>Region</th>
+                    <th>Last Update (UTC)</th>
+                  </tr>
+                </thead>
+                <tbody id="status-rows"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <aside class="panel panel-alerts" id="reports">
+            <div class="panel-head">
+              <div>
+                <h3>Recent Alerts</h3>
+                <p>Actionable incidents prioritized by severity</p>
+              </div>
+            </div>
+            <ul id="alert-list" class="alert-list"></ul>
+          </aside>
+
+          <article class="panel panel-docs" id="audit">
+            <div class="panel-head">
+              <div>
+                <h3>Governance Snapshot</h3>
+                <p>Repo metadata and quick validation commands</p>
+              </div>
+            </div>
+            <div class="docs-layout">
+              <div class="meta-block">
+                <p><strong>Version:</strong> <span id="repo-version">loading…</span></p>
+                <p><strong>Profile:</strong> production-safe baseline</p>
+                <p><strong>Validation:</strong> copy commands below</p>
+              </div>
+              <div id="command-list" class="command-list"></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
 
     <script type="module" src="./web/app.js"></script>
   </body>
