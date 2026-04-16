@@ -114,6 +114,29 @@ function renderChart() {
   const peak = Math.max(...throughput24h);
   container.textContent = "";
 
+  // Create accessible description element
+  const descriptionId = "chart-desc";
+  const existingDesc = document.getElementById(descriptionId);
+  if (existingDesc) {
+    existingDesc.remove();
+  }
+
+  const description = document.createElement("div");
+  description.id = descriptionId;
+  description.className = "sr-only";
+
+  let descriptionText = "24-hour processing volume data: ";
+  throughput24h.forEach((value, index) => {
+    const hourLabel = String(index).padStart(2, "0");
+    const formattedValue = value.toLocaleString();
+    const isCurrent = index === throughput24h.length - 1;
+    descriptionText += `Hour ${hourLabel}: ${formattedValue} records per minute${isCurrent ? " (current hour)" : ""}. `;
+  });
+
+  description.textContent = descriptionText.trim();
+  container.setAttribute("aria-describedby", descriptionId);
+  container.parentNode.insertBefore(description, container);
+
   throughput24h.forEach((value, index) => {
     const bar = document.createElement("div");
     bar.className = "chart-bar";
