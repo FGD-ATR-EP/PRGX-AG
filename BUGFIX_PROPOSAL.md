@@ -153,3 +153,10 @@ Revert this change set if consumers require previous static-only documentation r
 - Added `scripts/ci/check_console_docs_consistency.py` to prevent drift between README Operational Console descriptions and `index.html` dashboard semantics.
 - Updated `.github/workflows/prgx-test.yml` to run both new documentation-integrity checks before governed integration/test matrix execution.
 - Refreshed `README.md`, `SECURITY.md`, `LICENSE`, and `index.html` metadata text so repository security/legal/console descriptions stay consistent with the new controls.
+
+## 2026-04-21 Workflow contract realignment and README structure sync
+- Refactored all active GitHub workflows to match the actual hybrid codebase responsibilities (Python runtime, web console assets, governance automation) with clearer triggers, scoped paths, and consistent concurrency/timeout behavior.
+- Updated CI quality coverage to include Node web-console tests (`npm run test:web`) alongside existing Python compile/lint/type/test checks.
+- Hardened Pages deployment to publish only a dedicated static-site bundle (`index.html` + `web/`) instead of uploading the entire repository.
+- Expanded `.prgx-ag/workflows/*.yaml` governance contracts with explicit runtime profile, mode, dry-run semantics, verification commands, and artifact scopes.
+- Rewrote `README.md` sections to mirror current repository structure and the updated workflow map.

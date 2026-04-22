@@ -1,3 +1,16 @@
 name: structure_repair
-allowed_operations: [create_missing_init, create_missing_manifest, normalize_examples]
-forbidden_operations: [delete_directories, overwrite_protected_paths]
+mode: bounded_fix
+runtime_profile: staging
+allowed_operations:
+  - create_missing_init
+  - create_missing_manifest
+  - normalize_examples
+  - stabilize_repo_metadata
+forbidden_operations:
+  - delete_directories
+  - overwrite_protected_paths
+  - move_runtime_root
+verification:
+  commands:
+    - python -m compileall src
+    - pytest -q tests/test_manifest_loader.py tests/test_ci_scripts.py --maxfail=1

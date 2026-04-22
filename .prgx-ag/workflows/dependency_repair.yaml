@@ -1,3 +1,15 @@
 name: dependency_repair
-allowed_operations: [normalize_manifest, remove_duplicate_entries]
-forbidden_operations: [major_version_jump, remote_publish]
+mode: bounded_fix
+runtime_profile: staging
+allowed_operations:
+  - normalize_manifest
+  - remove_duplicate_entries
+  - lockfile_refresh
+forbidden_operations:
+  - major_version_jump
+  - remote_publish
+  - dependency_source_override
+verification:
+  commands:
+    - python -m compileall src
+    - pytest -q tests/test_dependency_scanner.py tests/test_repository_metadata.py --maxfail=1

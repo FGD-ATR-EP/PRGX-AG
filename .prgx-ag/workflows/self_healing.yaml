@@ -1,3 +1,23 @@
 name: self_healing
-steps: [scan, translate_intent, policy_audit, execute_safe_fix, report, rsi_feedback]
 mode: pr_first
+runtime_profile: staging
+dry_run: false
+steps:
+  - scan
+  - translate_intent
+  - policy_audit
+  - execute_safe_fix
+  - verify
+  - report
+  - rsi_feedback
+verification:
+  commands:
+    - python -m compileall src
+    - python scripts/ci/check_typos.py
+    - python scripts/ci/check_console_docs_consistency.py
+    - pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1
+artifacts:
+  include:
+    - .prgx-ag/audit/
+    - .prgx-ag/evidence/
+    - .prgx-ag/state/

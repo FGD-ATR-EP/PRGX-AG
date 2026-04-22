@@ -1,17 +1,22 @@
-name: Summarize new issues
+name: summarize-new-issues
 
 on:
   issues:
     types: [opened]
 
+permissions:
+  issues: write
+  models: read
+  contents: read
+
+concurrency:
+  group: issue-summary-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
 jobs:
   summary:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      models: read
-      contents: read
-
+    timeout-minutes: 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,8 +32,7 @@ jobs:
             Body: ${{ github.event.issue.body }}
 
       - name: Comment with AI summary
-        run: |
-          gh issue comment $ISSUE_NUMBER --body "$RESPONSE"
+        run: gh issue comment "$ISSUE_NUMBER" --body "$RESPONSE"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}

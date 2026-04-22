@@ -1,35 +1,47 @@
 # PRGX-AG Governance Runtime
 
-PRGX-AG is a **hybrid Python backend + governance-documentation repository**. The executable runtime lives in `src/prgx_ag/` and the policy/manifests/audit workflow data lives in `.prgx-ag/`.
+PRGX-AG คือ **hybrid repository** ที่รวม Python backend runtime และ governance assets ไว้ในที่เดียว เพื่อรองรับวงจรสแกน วิเคราะห์ นำเสนอเจตนาแก้ไข และซ่อมแบบมีนโยบายกำกับ.
 
 ## Repository Positioning
-- **This repository is:** an implementation-ready governance runtime for local/CI operations.
-- **This repository is not:** a static-docs-only site and not a claim of proven large-scale production adoption.
-- **Current maturity:** architecture-complete with automated tests and governed repair flow; still early-stage in ecosystem adoption.
+- **This repository is:** implementation-ready governance runtime สำหรับ local และ CI.
+- **This repository is not:** static-docs-only site และไม่อ้างว่าเป็นบริการ production-scale ที่ deploy ในวงกว้างแล้ว.
+- **Current maturity:** architecture-complete, มี automated tests, และมี policy-driven repair workflows.
 
 ## Core Runtime Capabilities
-- **PRGX1 Sentry:** read-only repository drift and integrity scanning.
-- **PRGX3 Diplomat:** finding translation, healing-intent generation, and reviewer narrative output.
-- **PRGX2 Mechanic:** bounded fix execution with policy and path controls.
-- **Nexus Orchestrator:** event routing and healing-cycle coordination.
-- **Patimokkha Policy Engine:** blocks unsafe/destructive intent prior to execution.
-- **RSI Layer:** bounded learning artifacts (`GemOfWisdom`) tied to governance-safe updates.
+- **PRGX1 Sentry:** read-only scanning สำหรับ drift / integrity.
+- **PRGX3 Diplomat:** แปล findings ไปเป็น intent / narrative ที่ review ได้.
+- **PRGX2 Mechanic:** execute การแก้ไขแบบ bounded ตาม policy.
+- **Nexus Orchestrator:** ควบคุม healing cycle และ event flow.
+- **Patimokkha Policy Engine:** บล็อก intent ที่เสี่ยงก่อน execute.
+- **RSI Layer:** บันทึก bounded learning artifacts (`GemOfWisdom`) อย่างปลอดภัย.
 
 ## Repository Layout
-- `src/prgx_ag/` — Python runtime, agents, orchestration, policy evaluators, schemas, and services.
-- `.prgx-ag/` — policy, manifests, workflows, state, and audit log data used by runtime.
-- `tests/` — unit/integration regression coverage.
-- `index.html` + `web/` — static operational console for repository metadata and validation quick checks.
-- `SECURITY.md`, `COPYRIGHT.md`, `LICENSE` — security disclosure and legal terms.
+- `src/prgx_ag/` — runtime modules (agents, orchestrator, policy, schemas, services, utils).
+- `tests/` — unit/integration/regression tests ของ runtime + CI scripts + web console behavior.
+- `.prgx-ag/workflows/` — workflow contracts ฝั่ง governance runtime (`scan_only`, `self_healing`, `dependency_repair`, `structure_repair`).
+- `.github/workflows/` — GitHub Actions pipelines สำหรับ scan/test/nightly/heal-pr/security/pages.
+- `scripts/ci/` — consistency & typo guard scripts สำหรับ docs/console alignment.
+- `index.html` + `web/` — static operational console สำหรับ monitoring metadata และ quick validation.
+
+## CI/CD Workflow Map (Updated)
+- `prgx-scan.yml` — scan-only gate สำหรับ runtime/governance path changes.
+- `prgx-test.yml` — quality gates (compile, typo, docs-consistency, lint, mypy, web test, pytest).
+- `prgx-nightly.yml` — scheduled observational + once cycle พร้อม artifact upload.
+- `prgx-heal-pr.yml` — governed healing run ที่สร้าง PR อัตโนมัติเมื่อผ่าน verification.
+- `main.yml` — manual/scheduled runtime-cycle orchestration สำหรับ operator.
+- `codeql.yml` — CodeQL analysis สำหรับ `python`, `javascript-typescript`, และ `actions`.
+- `proof-html.yml` — proof checks สำหรับ `index.html` และ `web/`.
+- `static.yml` — deploy เฉพาะ static console bundle ไป GitHub Pages.
+- `auto-assign.yml`, `stale.yml`, `summary.yml` — repository governance automation.
 
 ## Operational Console (`index.html`)
-The root `index.html` is an interactive repository console (no build step required):
-- shows an operator-oriented dashboard for runtime health and task status,
-- renders KPI cards, a 24-hour throughput chart, and a recent alert queue,
-- provides copy-ready validation commands,
+หน้า `index.html` เป็น interactive operator-oriented dashboard (ไม่ต้อง build):
+- แสดง runtime health และ task status สำหรับงานกำกับดูแล,
+- แสดง kpi cards, a 24-hour throughput chart, และ recent alert queue,
+- มี copy-ready validation commands สำหรับการตรวจสอบอย่างรวดเร็ว,
 - loads repository version from `package.json`.
 
-Run locally with:
+Run locally:
 
 ```bash
 python -m http.server 8080
@@ -41,6 +53,7 @@ python -m http.server 8080
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .[dev]
+npm ci
 ```
 
 ## CLI Usage
@@ -55,20 +68,23 @@ python -m prgx_ag.main --scan-only
 python -m compileall src
 python scripts/ci/check_typos.py
 python scripts/ci/check_console_docs_consistency.py
+npm run test:web
 pytest -q --maxfail=1
 pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1
 ```
 
-## Documentation Integrity Checks (CI)
-- `scripts/ci/check_typos.py` ตรวจคำผิดแบบอัตโนมัติในเอกสาร governance (`README.md`, `SECURITY.md`, `BUGFIX_PROPOSAL.md`, และเอกสารสเปกภาษาไทย) รวมถึงคำอธิบายประกอบใน Python (docstrings/comments).
-- `scripts/ci/check_console_docs_consistency.py` ตรวจความสอดคล้องเพื่อป้องกันไม่ให้คำอธิบาย Operational Console ใน `README.md` และแดชบอร์ดใน `index.html` แตกต่างกัน.
+## Governance Workflow Contracts (`.prgx-ag/workflows`)
+- `scan_only.yaml`: read-only scan/report profile.
+- `self_healing.yaml`: scan → intent translation → policy audit → safe fix → verify → report → RSI feedback.
+- `dependency_repair.yaml`: dependency-focused bounded fixes + verification commands.
+- `structure_repair.yaml`: structure-focused bounded fixes + verification commands.
 
 ## Security and Compliance
-- Vulnerability disclosure process: `SECURITY.md`
-- Copyright and ownership notice: `COPYRIGHT.md`
-- Open-source license terms (MIT): `LICENSE`
+- Vulnerability disclosure: `SECURITY.md`
+- Copyright and ownership: `COPYRIGHT.md`
+- License: `LICENSE` (MIT)
 
 ## Thai Summary (สรุประบบภาษาไทย)
-- รีโปนี้เป็นแบบผสม: Python runtime ที่รันได้จริง + governance assets ใน `.prgx-ag`.
-- วงจรทำงานหลัก: PRGX1 ตรวจจับ → PRGX3 แปลเจตนาแก้ไข → PRGX2 ดำเนินการแบบมีขอบเขต → Nexus บันทึกหลักฐานและวงจรเรียนรู้.
-- `index.html` ใช้เป็นหน้า operational console สำหรับตรวจสอบความพร้อมของระบบและเอกสารหลักแบบรวดเร็ว.
+- รีโปนี้เป็น runtime + governance assets ที่ออกแบบให้วงจรซ่อมทำงานได้ใน local/CI โดยมี policy ควบคุม.
+- โครงสร้าง workflow ถูกแยกชัดเจนระหว่าง GitHub CI pipelines และ runtime governance contracts.
+- README นี้สะท้อนโครงสร้างฐานโค้ดล่าสุดให้ตรงกับไฟล์ที่รันจริงในรีโป.
