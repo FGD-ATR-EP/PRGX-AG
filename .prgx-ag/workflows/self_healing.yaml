@@ -1,7 +1,7 @@
 name: self_healing
 mode: pr_first
 runtime_profile: staging
-dry_run: false
+dry_run: true
 steps:
   - scan
   - translate_intent
@@ -15,6 +15,7 @@ verification:
     - python -m compileall src
     - python scripts/ci/check_typos.py
     - python scripts/ci/check_console_docs_consistency.py
+    - npm ci && npm run test:web
     - pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1
 artifacts:
   include:

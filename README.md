@@ -29,9 +29,9 @@ PRGX-AG คือ **hybrid repository** ที่รวม Python backend runtim
 - `prgx-nightly.yml` — scheduled observational + once cycle พร้อม artifact upload.
 - `prgx-heal-pr.yml` — governed healing run ที่สร้าง PR อัตโนมัติเมื่อผ่าน verification.
 - `main.yml` — manual/scheduled runtime-cycle orchestration สำหรับ operator.
-- `codeql.yml` — CodeQL analysis สำหรับ `python`, `javascript-typescript`, และ `actions`.
+- `codeql.yml` — CodeQL analysis สำหรับ `python` และ `javascript-typescript`.
 - `proof-html.yml` — proof checks สำหรับ `index.html` และ `web/`.
-- `static.yml` — deploy เฉพาะ static console bundle ไป GitHub Pages.
+- `static.yml` — deploy static console bundle (`index.html`, `web/`, `package.json`) ไป GitHub Pages.
 - `auto-assign.yml`, `stale.yml`, `summary.yml` — repository governance automation.
 
 ## Operational Console (`index.html`)
