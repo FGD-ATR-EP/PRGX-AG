@@ -1,3 +1,11 @@
 name: scan_only
-steps: [scan, report]
 mode: read_only
+runtime_profile: development
+dry_run: true
+steps:
+  - scan
+  - report
+artifacts:
+  include:
+    - .prgx-ag/evidence/
+    - .prgx-ag/state/

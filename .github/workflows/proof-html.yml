@@ -3,11 +3,13 @@ name: proof-html
 on:
   push:
     paths:
-      - '**/*.html'
+      - 'index.html'
+      - 'web/**'
       - '.github/workflows/proof-html.yml'
   pull_request:
     paths:
-      - '**/*.html'
+      - 'index.html'
+      - 'web/**'
       - '.github/workflows/proof-html.yml'
   workflow_dispatch:
 
@@ -19,11 +21,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      PRGX_RUNTIME_PROFILE: "development"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4

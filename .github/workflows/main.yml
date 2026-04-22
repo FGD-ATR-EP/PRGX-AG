@@ -1,17 +1,6 @@
-name: PRGX-AG Main
+name: prgx-main
 
 on:
-  push:
-    branches:
-      - main
-      - master
-      - develop
-      - "feature/**"
-  pull_request:
-    branches:
-      - main
-      - master
-      - develop
   workflow_dispatch:
     inputs:
       mode:
@@ -37,26 +26,22 @@ permissions:
   contents: read
 
 concurrency:
-  group: prgx-ag-main-${{ github.ref }}
+  group: prgx-main-${{ github.ref }}
   cancel-in-progress: true
 
 env:
   PYTHONUNBUFFERED: "1"
   PIP_DISABLE_PIP_VERSION_CHECK: "1"
-  PRGX_AG_DRY_RUN: "true"
   PRGX_AG_ENV: "ci"
-  PRGX_RUNTIME_PROFILE: "development"
   PRGX_AUDIT_WINDOW_HOURS: "24"
-  PRGX_LOG_DIR: ".prgx-ag/artifacts"
-  PRGX_BRANCH_CONTEXT: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name }}
 
 jobs:
-  prgx-main:
-    name: Scan, Once, and Test
+  runtime-cycle:
+    name: Runtime cycle
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment:
-      name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target_environment || ((github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name) == 'main' && 'production' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name) == 'master' && 'production' || (github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'staging' || 'development') }}
+      name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target_environment || 'staging' }}
 
     steps:
       - name: Checkout repository
@@ -67,23 +52,14 @@ jobs:
         run: |
           echo "PRGX_WORKFLOW_MODE=${{ github.event.inputs.mode }}" >> "$GITHUB_ENV"
           echo "PRGX_AG_DRY_RUN=${{ github.event.inputs.dry_run }}" >> "$GITHUB_ENV"
-          echo "PRGX_DEPLOY_ENV=${{ github.event.inputs.target_environment }}" >> "$GITHUB_ENV"
           echo "PRGX_RUNTIME_PROFILE=${{ github.event.inputs.runtime_profile }}" >> "$GITHUB_ENV"
 
-      - name: Set branch-derived environment defaults
+      - name: Set scheduled defaults
         if: github.event_name != 'workflow_dispatch'
         run: |
           echo "PRGX_WORKFLOW_MODE=once" >> "$GITHUB_ENV"
-          if [ "${PRGX_BRANCH_CONTEXT}" = "main" ] || [ "${PRGX_BRANCH_CONTEXT}" = "master" ]; then
-            echo "PRGX_DEPLOY_ENV=production" >> "$GITHUB_ENV"
-            echo "PRGX_RUNTIME_PROFILE=production" >> "$GITHUB_ENV"
-          elif [ "${PRGX_BRANCH_CONTEXT}" = "develop" ]; then
-            echo "PRGX_DEPLOY_ENV=staging" >> "$GITHUB_ENV"
-            echo "PRGX_RUNTIME_PROFILE=staging" >> "$GITHUB_ENV"
-          else
-            echo "PRGX_DEPLOY_ENV=development" >> "$GITHUB_ENV"
-            echo "PRGX_RUNTIME_PROFILE=development" >> "$GITHUB_ENV"
-          fi
+          echo "PRGX_AG_DRY_RUN=true" >> "$GITHUB_ENV"
+          echo "PRGX_RUNTIME_PROFILE=staging" >> "$GITHUB_ENV"
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -98,61 +74,32 @@ jobs:
           python -m pip install -e .[dev] ruff mypy
 
       - name: Prepare artifact directories
-        run: |
-          mkdir -p .prgx-ag/artifacts .prgx-ag/audit .prgx-ag/state
-
-      - name: Announce workflow environment
-        run: |
-          echo "Using GitHub Environment: ${PRGX_DEPLOY_ENV}"
-          echo "Using runtime profile: ${PRGX_RUNTIME_PROFILE}"
+        run: mkdir -p .prgx-ag/artifacts .prgx-ag/audit .prgx-ag/state .prgx-ag/evidence
 
       - name: Validate source tree compiles
         run: python -m compileall src
 
       - name: Run PRGX scan-only
         if: env.PRGX_WORKFLOW_MODE != 'test-only'
-        run: |
-          set -e
-          if command -v prgx-ag >/dev/null 2>&1; then
-            prgx-ag --scan-only | tee .prgx-ag/artifacts/prgx-scan.log
-          else
-            python -m prgx_ag.main --scan-only | tee .prgx-ag/artifacts/prgx-scan.log
-          fi
+        run: python -m prgx_ag.main --scan-only | tee .prgx-ag/artifacts/prgx-scan.log
 
       - name: Run PRGX once cycle
         if: env.PRGX_WORKFLOW_MODE == 'once'
-        run: |
-          set -e
-          if command -v prgx-ag >/dev/null 2>&1; then
-            prgx-ag --once | tee .prgx-ag/artifacts/prgx-once.log
-          else
-            python -m prgx_ag.main --once | tee .prgx-ag/artifacts/prgx-once.log
-          fi
+        run: python -m prgx_ag.main --once | tee .prgx-ag/artifacts/prgx-once.log
 
       - name: Run tests
         if: env.PRGX_WORKFLOW_MODE != 'scan-only'
-        run: |
-          pytest -q --maxfail=1 --disable-warnings | tee .prgx-ag/artifacts/pytest.log
+        run: pytest -q --maxfail=1 --disable-warnings | tee .prgx-ag/artifacts/pytest.log
 
       - name: Upload PRGX artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: prgx-ag-artifacts-${{ github.run_id }}
+          name: prgx-main-artifacts-${{ github.run_id }}
           path: |
             .prgx-ag/artifacts/**
             .prgx-ag/audit/**
             .prgx-ag/evidence/**
             .prgx-ag/state/**
           if-no-files-found: warn
-          include-hidden-files: true
-
-      - name: Upload pytest cache
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: prgx-ag-pytest-cache-${{ github.run_id }}
-          path: |
-            .pytest_cache/**
-          if-no-files-found: ignore
           include-hidden-files: true
