@@ -15,7 +15,7 @@ verification:
     - python -m compileall src
     - python scripts/ci/check_typos.py
     - python scripts/ci/check_console_docs_consistency.py
-    - npm ci && npm run test:web
+    - npm --prefix web ci && npm --prefix web run test:web
     - pytest -q tests/test_pipeline_integration.py tests/test_nexus_cycle.py --maxfail=1
 artifacts:
   include:
