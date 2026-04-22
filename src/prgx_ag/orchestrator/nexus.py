@@ -15,6 +15,7 @@ from prgx_ag.services.governance_evidence import (
     append_audit_event,
     create_signed_governance_evidence_bundle,
 )
+from prgx_ag.services.workflow_loader import load_self_healing_workflow_config
 
 
 class PRGXAGNexus:
@@ -105,6 +106,10 @@ class PRGXAGNexus:
             await self.bus.publish(RSI_FEEDBACK, {"gem": gem.model_dump()})
 
     async def run_self_healing_cycle(self) -> dict[str, object]:
+        workflow_config = load_self_healing_workflow_config(self.repo_root)
+        settings_override = "dry_run" in self.settings.model_fields_set
+        effective_dry_run = self.settings.dry_run if settings_override else workflow_config.dry_run
+        self.prgx2.dry_run = effective_dry_run
         return await self.prgx1.publish_issue_report()
 
     async def run_scan_only(self) -> dict[str, object]:

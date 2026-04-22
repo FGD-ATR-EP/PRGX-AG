@@ -125,3 +125,51 @@ def test_nexus_cycle_publishes_audit_violation_without_execution_for_hard_reject
         assert violation['audit_status'].value == 'REJECTED'
         assert violation['audit']['outcome'] == 'reject'
     asyncio.run(_run())
+
+
+def test_self_healing_uses_yaml_dry_run_when_env_not_set(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    async def _run() -> None:
+        workflow = tmp_path / ".prgx-ag/workflows/self_healing.yaml"
+        workflow.parent.mkdir(parents=True)
+        workflow.write_text("name: self_healing\ndry_run: false\n", encoding="utf-8")
+
+        monkeypatch.setenv("PRGX_AG_REPO_ROOT", str(tmp_path))
+        monkeypatch.delenv("PRGX_AG_DRY_RUN", raising=False)
+        settings = Settings()
+        nexus = PRGX_AG_Nexus(settings)
+
+        observed: dict[str, bool] = {}
+
+        async def _fake_publish_issue_report() -> dict[str, object]:
+            observed["dry_run"] = nexus.prgx2.dry_run
+            return {}
+
+        nexus.prgx1.publish_issue_report = _fake_publish_issue_report  # type: ignore[method-assign]
+        await nexus.run_self_healing_cycle()
+        assert observed["dry_run"] is False
+
+    asyncio.run(_run())
+
+
+def test_self_healing_env_dry_run_overrides_yaml(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    async def _run() -> None:
+        workflow = tmp_path / ".prgx-ag/workflows/self_healing.yaml"
+        workflow.parent.mkdir(parents=True)
+        workflow.write_text("name: self_healing\ndry_run: false\n", encoding="utf-8")
+
+        monkeypatch.setenv("PRGX_AG_REPO_ROOT", str(tmp_path))
+        monkeypatch.setenv("PRGX_AG_DRY_RUN", "true")
+        settings = Settings()
+        nexus = PRGX_AG_Nexus(settings)
+
+        observed: dict[str, bool] = {}
+
+        async def _fake_publish_issue_report() -> dict[str, object]:
+            observed["dry_run"] = nexus.prgx2.dry_run
+            return {}
+
+        nexus.prgx1.publish_issue_report = _fake_publish_issue_report  # type: ignore[method-assign]
+        await nexus.run_self_healing_cycle()
+        assert observed["dry_run"] is True
+
+    asyncio.run(_run())

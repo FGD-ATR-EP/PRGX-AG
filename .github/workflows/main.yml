@@ -81,15 +81,24 @@ jobs:
 
       - name: Run PRGX scan-only
         if: env.PRGX_WORKFLOW_MODE != 'test-only'
-        run: python -m prgx_ag.main --scan-only | tee .prgx-ag/artifacts/prgx-scan.log
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m prgx_ag.main --scan-only | tee .prgx-ag/artifacts/prgx-scan.log
 
       - name: Run PRGX once cycle
         if: env.PRGX_WORKFLOW_MODE == 'once'
-        run: python -m prgx_ag.main --once | tee .prgx-ag/artifacts/prgx-once.log
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m prgx_ag.main --once | tee .prgx-ag/artifacts/prgx-once.log
 
       - name: Run tests
         if: env.PRGX_WORKFLOW_MODE != 'scan-only'
-        run: pytest -q --maxfail=1 --disable-warnings | tee .prgx-ag/artifacts/pytest.log
+        shell: bash
+        run: |
+          set -o pipefail
+          pytest -q --maxfail=1 --disable-warnings | tee .prgx-ag/artifacts/pytest.log
 
       - name: Upload PRGX artifacts
         if: always()
