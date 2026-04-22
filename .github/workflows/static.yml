@@ -36,6 +36,7 @@ jobs:
         run: |
           mkdir -p .site/web
           cp index.html .site/index.html
+          cp package.json .site/package.json
           cp -R web/* .site/web/
 
       - name: Upload artifact
